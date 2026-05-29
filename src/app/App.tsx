@@ -5,8 +5,32 @@ import { TemplateGallery } from "../builder/TemplateGallery";
 import { createStateFromTemplate, templates } from "../templates/templateData";
 import type { BuilderState } from "../templates/types";
 
+function loadDraftWithTemplateDefaults() {
+  const savedDraft = loadSavedDraft();
+
+  if (!savedDraft) {
+    return null;
+  }
+
+  const template = templates.find((item) => item.id === savedDraft.templateId);
+
+  if (!template?.page.layout || savedDraft.page.layout === template.page.layout) {
+    return savedDraft;
+  }
+
+  return {
+    ...savedDraft,
+    page: {
+      ...savedDraft.page,
+      layout: template.page.layout,
+    },
+  };
+}
+
 export function App() {
-  const [builderState, setBuilderState] = useState<BuilderState | null>(() => loadSavedDraft());
+  const [builderState, setBuilderState] = useState<BuilderState | null>(() =>
+    loadDraftWithTemplateDefaults(),
+  );
   const [autosaveStatus, setAutosaveStatus] = useState<string>(() =>
     builderState ? "Draft restored" : "",
   );

@@ -4,9 +4,12 @@ export type FontWeight = "300" | "400" | "700";
 
 export type TextAlign = "left" | "center" | "right";
 
+export type PageLayout = "centered" | "card";
+
 export type PageSettings = {
   backgroundColor: string;
   contentWidth: number;
+  layout?: PageLayout;
   textColor: string;
 };
 

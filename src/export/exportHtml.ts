@@ -9,6 +9,22 @@ function escapeHtml(value: string) {
     .replace(/'/g, "&#039;");
 }
 
+function getButtonAlignmentStyle(element: BuilderElement) {
+  if (element.type !== "button") {
+    return "";
+  }
+
+  if (element.style.textAlign === "right") {
+    return "margin-left: auto; margin-right: 0";
+  }
+
+  if (element.style.textAlign === "center") {
+    return "margin-left: auto; margin-right: auto";
+  }
+
+  return "margin-left: 0; margin-right: auto";
+}
+
 function renderElement(element: BuilderElement) {
   const style = [
     `color: ${element.style.color ?? "inherit"}`,
@@ -17,6 +33,7 @@ function renderElement(element: BuilderElement) {
     element.style.fontWeight ? `font-weight: ${element.style.fontWeight}` : "",
     element.style.textAlign ? `text-align: ${element.style.textAlign}` : "",
     element.style.borderRadius ? `border-radius: ${element.style.borderRadius}px` : "",
+    getButtonAlignmentStyle(element),
   ]
     .filter(Boolean)
     .join("; ");
@@ -40,6 +57,7 @@ function renderElement(element: BuilderElement) {
 
 export function buildStaticHtml(state: BuilderState) {
   const body = state.elements.map(renderElement).join("\n        ");
+  const isCardLayout = state.page.layout === "card";
 
   return `<!doctype html>
 <html lang="en">
@@ -60,7 +78,7 @@ export function buildStaticHtml(state: BuilderState) {
       body {
         margin: 0;
         min-height: 100vh;
-        background: ${state.page.backgroundColor};
+        background: ${isCardLayout ? "#f6f4ef" : state.page.backgroundColor};
         color: ${state.page.textColor};
       }
 
@@ -73,6 +91,32 @@ export function buildStaticHtml(state: BuilderState) {
 
       .page-content {
         width: min(100%, ${state.page.contentWidth}px);
+      }
+
+      .page-content--card {
+        max-width: 560px;
+        border: 1px solid rgba(47, 36, 27, 0.18);
+        border-radius: 8px;
+        background: ${state.page.backgroundColor};
+        box-shadow: 0 24px 60px rgba(47, 36, 27, 0.14);
+        padding: 42px;
+      }
+
+      .page-content--card .page-eyebrow {
+        margin-bottom: 28px;
+      }
+
+      .page-content--card .page-heading {
+        margin-bottom: 18px;
+      }
+
+      .page-content--card .page-button {
+        margin: 30px 0 0;
+      }
+
+      .page-content--card .page-paragraph {
+        max-width: 420px;
+        margin: 0;
       }
 
       .page-eyebrow {
@@ -93,18 +137,25 @@ export function buildStaticHtml(state: BuilderState) {
       }
 
       .page-button {
-        display: inline-flex;
+        display: flex;
+        width: max-content;
         min-height: 44px;
         align-items: center;
         justify-content: center;
         padding: 0 22px;
         text-decoration: none;
       }
+
+      @media (max-width: 720px) {
+        .page-content--card {
+          padding: 30px;
+        }
+      }
     </style>
   </head>
   <body>
     <main class="page-shell">
-      <section class="page-content" aria-label="Exported page">
+      <section class="page-content${isCardLayout ? " page-content--card" : ""}" aria-label="Exported page">
         ${body}
       </section>
     </main>

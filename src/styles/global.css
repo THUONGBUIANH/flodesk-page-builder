@@ -246,6 +246,32 @@ button:disabled {
   width: 100%;
 }
 
+.preview-page--card .preview-page__content {
+  max-width: min(100%, 560px);
+  border: 1px solid rgba(47, 36, 27, 0.18);
+  border-radius: 8px;
+  background: var(--card-background, #fffaf3);
+  box-shadow: 0 24px 60px rgba(47, 36, 27, 0.14);
+  padding: 42px;
+}
+
+.preview-page--card .preview-element--eyebrow {
+  margin-bottom: 28px;
+}
+
+.preview-page--card .preview-element--heading {
+  margin-bottom: 18px;
+}
+
+.preview-page--card .preview-element--button {
+  margin: 30px 0 0;
+}
+
+.preview-page--card .preview-element--paragraph {
+  max-width: 420px;
+  margin: 0;
+}
+
 .preview-element {
   position: relative;
   width: 100%;
@@ -281,8 +307,8 @@ button:disabled {
 }
 
 .preview-element--button {
-  display: inline-flex;
-  width: auto;
+  display: flex;
+  width: fit-content;
   min-height: 44px;
   align-items: center;
   justify-content: center;
@@ -414,6 +440,10 @@ button:disabled {
 
   .preview-page {
     min-height: 520px;
+  }
+
+  .preview-page--card .preview-page__content {
+    padding: 30px;
   }
 }
 

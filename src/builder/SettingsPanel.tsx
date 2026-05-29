@@ -113,6 +113,7 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
         <Field label="Content">
           {selectedElement.type === "paragraph" ? (
             <Textarea
+              id={`${selectedElement.id}-content`}
               rows={5}
               value={selectedElement.content}
               onChange={(event) =>
@@ -124,6 +125,7 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
             />
           ) : (
             <TextInput
+              id={`${selectedElement.id}-content`}
               type="text"
               value={selectedElement.content}
               onChange={(event) =>

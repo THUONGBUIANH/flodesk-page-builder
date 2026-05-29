@@ -10,6 +10,7 @@ export const templates: TemplateDefinition[] = [
     page: {
       backgroundColor: "#e8f0ff",
       contentWidth: 760,
+      layout: "centered",
       textColor: "#111827",
     },
     elements: [
@@ -68,21 +69,22 @@ export const templates: TemplateDefinition[] = [
   },
   {
     id: "editorial-note",
-    name: "Editorial Note",
-    description: "A warm, editorial layout for a newsletter or personal update.",
-    accentColor: "#b45309",
-    previewBackground: "#fff7ed",
+    name: "Card",
+    description: "A compact personal card for a short intro and contact action.",
+    accentColor: "#2f241b",
+    previewBackground: "#f5efe7",
     page: {
-      backgroundColor: "#fff7ed",
-      contentWidth: 680,
+      backgroundColor: "#fffaf3",
+      contentWidth: 560,
+      layout: "card",
       textColor: "#2f241b",
     },
     elements: [
       {
         id: "editorial-eyebrow",
         type: "eyebrow",
-        label: "Section label",
-        content: "Letter from the studio",
+        label: "Role",
+        content: "Independent creator",
         style: {
           color: "#b45309",
           fontSize: 13,
@@ -93,40 +95,40 @@ export const templates: TemplateDefinition[] = [
       {
         id: "editorial-heading",
         type: "heading",
-        label: "Title",
-        content: "A calmer way to introduce your next idea",
+        label: "Name",
+        content: "Your Name",
         style: {
           color: "#2f241b",
-          fontSize: 38,
+          fontSize: 46,
           fontWeight: "700",
-          textAlign: "left",
-        },
-      },
-      {
-        id: "editorial-body",
-        type: "paragraph",
-        label: "Body copy",
-        content:
-          "Use this template for a refined announcement, a personal note, or a softer campaign page with room for thoughtful copy.",
-        style: {
-          color: "#5f4b3c",
-          fontSize: 18,
-          fontWeight: "400",
           textAlign: "left",
         },
       },
       {
         id: "editorial-button",
         type: "button",
-        label: "CTA button",
-        content: "Read more",
+        label: "Contact button",
+        content: "Contact me",
         style: {
           color: "#fffaf3",
           backgroundColor: "#2f241b",
           fontSize: 15,
           fontWeight: "700",
-          textAlign: "center",
+          textAlign: "left",
           borderRadius: 999,
+        },
+      },
+      {
+        id: "editorial-body",
+        type: "paragraph",
+        label: "Intro",
+        content:
+          "Designer and builder focused on thoughtful digital experiences, calm systems, and polished customer journeys.",
+        style: {
+          color: "#5f4b3c",
+          fontSize: 17,
+          fontWeight: "400",
+          textAlign: "left",
         },
       },
     ],

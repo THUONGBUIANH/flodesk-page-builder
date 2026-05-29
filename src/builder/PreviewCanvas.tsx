@@ -16,6 +16,30 @@ function elementClassName(element: BuilderElement, selected: boolean) {
     .join(" ");
 }
 
+function buttonAlignmentStyle(element: BuilderElement): React.CSSProperties {
+  if (element.type !== "button") {
+    return {};
+  }
+
+  if (element.style.textAlign === "right") {
+    return { marginLeft: "auto", marginRight: 0 };
+  }
+
+  if (element.style.textAlign === "center") {
+    return { marginLeft: "auto", marginRight: "auto" };
+  }
+
+  return { marginLeft: 0, marginRight: "auto" };
+}
+
+function previewPageStyle(state: BuilderState): React.CSSProperties {
+  return {
+    backgroundColor: state.page.layout === "card" ? "#f6f4ef" : state.page.backgroundColor,
+    color: state.page.textColor,
+    "--card-background": state.page.backgroundColor,
+  } as React.CSSProperties;
+}
+
 export function PreviewCanvas({ state, onStateChange }: PreviewCanvasProps) {
   const selectPage = () => {
     onStateChange({ ...state, selectedTarget: { type: "page" } });
@@ -28,11 +52,14 @@ export function PreviewCanvas({ state, onStateChange }: PreviewCanvasProps) {
   return (
     <section className="preview-region" aria-label="Page preview">
       <div
-        className={`preview-page ${state.selectedTarget.type === "page" ? "is-selected" : ""}`}
-        style={{
-          backgroundColor: state.page.backgroundColor,
-          color: state.page.textColor,
-        }}
+        className={[
+          "preview-page",
+          state.page.layout === "card" ? "preview-page--card" : "",
+          state.selectedTarget.type === "page" ? "is-selected" : "",
+        ]
+          .filter(Boolean)
+          .join(" ")}
+        style={previewPageStyle(state)}
         onClick={selectPage}
       >
         <div className="preview-page__content" style={{ maxWidth: state.page.contentWidth }}>
@@ -47,6 +74,7 @@ export function PreviewCanvas({ state, onStateChange }: PreviewCanvasProps) {
                 fontWeight: element.style.fontWeight,
                 textAlign: element.style.textAlign,
                 borderRadius: element.style.borderRadius,
+                ...buttonAlignmentStyle(element),
               },
               onClick: (event: React.MouseEvent) => {
                 event.stopPropagation();
