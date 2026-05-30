@@ -372,8 +372,8 @@ button:disabled {
   gap: 8px;
 }
 
-.settings-field > span,
-.settings-field__label-row > span {
+.settings-field > label,
+.settings-field__label-row > label {
   font-size: 13px;
   font-weight: 700;
 }

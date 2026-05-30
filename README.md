@@ -39,6 +39,15 @@ pnpm preview
 4. See changes update immediately in the preview.
 5. Click Export to download a standalone `flodesk-page.html` file.
 
+## Project Structure
+
+- `src/app`: application shell and top-level flow.
+- `src/builder`: builder screens, editor controls, autosave, and builder state helpers.
+- `src/constants`: shared constants for builder limits and preview/export layout styles.
+- `src/export`: standalone HTML generation and download logic.
+- `src/templates`: serializable template data and shared builder types.
+- `src/styles`: global styles and assignment-specific UI polish.
+
 ## Implemented Scope
 
 - Template gallery with 2 visually distinct templates.

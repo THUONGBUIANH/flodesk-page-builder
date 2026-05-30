@@ -1,4 +1,4 @@
-import { CARD_LAYOUT_BACKGROUND, CARD_LAYOUT_BORDER, CARD_LAYOUT_SHADOW } from "../templates/rendering";
+import { CARD_LAYOUT_BACKGROUND, CARD_LAYOUT_BORDER, CARD_LAYOUT_SHADOW } from "../constants";
 import type { BuilderElement, BuilderState } from "../templates/types";
 
 function escapeHtml(value: string) {
@@ -61,107 +61,107 @@ export function buildStaticHtml(state: BuilderState) {
   const isCardLayout = state.page.layout === "card";
 
   return `<!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Exported Flodesk Page</title>
-    <style>
-      :root {
-        color-scheme: light;
-        font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      }
-
-      * {
-        box-sizing: border-box;
-      }
-
-      body {
-        margin: 0;
-        min-height: 100vh;
-        background: ${isCardLayout ? CARD_LAYOUT_BACKGROUND : state.page.backgroundColor};
-        color: ${state.page.textColor};
-      }
-
-      .page-shell {
-        min-height: 100vh;
-        display: grid;
-        place-items: center;
-        padding: 48px 20px;
-      }
-
-      .page-content {
-        width: min(100%, ${state.page.contentWidth}px);
-      }
-
-      .page-content--card {
-        max-width: 560px;
-        border: 1px solid ${CARD_LAYOUT_BORDER};
-        border-radius: 8px;
-        background: ${state.page.backgroundColor};
-        box-shadow: ${CARD_LAYOUT_SHADOW};
-        padding: 42px;
-      }
-
-      .page-content--card .page-eyebrow {
-        margin-bottom: 28px;
-      }
-
-      .page-content--card .page-heading {
-        margin-bottom: 18px;
-      }
-
-      .page-content--card .page-button {
-        margin: 30px 0 0;
-      }
-
-      .page-content--card .page-paragraph {
-        max-width: 420px;
-        margin: 0;
-      }
-
-      .page-eyebrow {
-        margin-bottom: 16px;
-        letter-spacing: 0;
-        text-transform: uppercase;
-      }
-
-      .page-heading {
-        margin: 0 0 20px;
-        line-height: 1.05;
-      }
-
-      .page-paragraph {
-        margin: 0 auto 28px;
-        max-width: 680px;
-        line-height: 1.65;
-      }
-
-      .page-button {
-        display: flex;
-        width: max-content;
-        min-height: 44px;
-        align-items: center;
-        justify-content: center;
-        padding: 0 22px;
-        text-decoration: none;
-      }
-
-      @media (max-width: 720px) {
-        .page-content--card {
-          padding: 30px;
+  <html lang="en">
+    <head>
+      <meta charset="UTF-8" />
+      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <title>Exported Flodesk Page</title>
+      <style>
+        :root {
+          color-scheme: light;
+          font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
         }
-      }
-    </style>
-  </head>
-  <body>
-    <main class="page-shell">
-      <section class="page-content${isCardLayout ? " page-content--card" : ""}" aria-label="Exported page">
-        ${body}
-      </section>
-    </main>
-  </body>
-</html>`;
+
+        * {
+          box-sizing: border-box;
+        }
+
+        body {
+          margin: 0;
+          min-height: 100vh;
+          background: ${isCardLayout ? CARD_LAYOUT_BACKGROUND : state.page.backgroundColor};
+          color: ${state.page.textColor};
+        }
+
+        .page-shell {
+          min-height: 100vh;
+          display: grid;
+          place-items: center;
+          padding: 48px 20px;
+        }
+
+        .page-content {
+          width: min(100%, ${state.page.contentWidth}px);
+        }
+
+        .page-content--card {
+          max-width: 560px;
+          border: 1px solid ${CARD_LAYOUT_BORDER};
+          border-radius: 8px;
+          background: ${state.page.backgroundColor};
+          box-shadow: ${CARD_LAYOUT_SHADOW};
+          padding: 42px;
+        }
+
+        .page-content--card .page-eyebrow {
+          margin-bottom: 28px;
+        }
+
+        .page-content--card .page-heading {
+          margin-bottom: 18px;
+        }
+
+        .page-content--card .page-button {
+          margin: 30px 0 0;
+        }
+
+        .page-content--card .page-paragraph {
+          max-width: 420px;
+          margin: 0;
+        }
+
+        .page-eyebrow {
+          margin-bottom: 16px;
+          letter-spacing: 0;
+          text-transform: uppercase;
+        }
+
+        .page-heading {
+          margin: 0 0 20px;
+          line-height: 1.05;
+        }
+
+        .page-paragraph {
+          margin: 0 auto 28px;
+          max-width: 680px;
+          line-height: 1.65;
+        }
+
+        .page-button {
+          display: flex;
+          width: max-content;
+          min-height: 44px;
+          align-items: center;
+          justify-content: center;
+          padding: 0 22px;
+          text-decoration: none;
+        }
+
+        @media (max-width: 720px) {
+          .page-content--card {
+            padding: 30px;
+          }
+        }
+      </style>
+    </head>
+    <body>
+      <main class="page-shell">
+        <section class="page-content${isCardLayout ? " page-content--card" : ""}" aria-label="Exported page">
+          ${body}
+        </section>
+      </main>
+    </body>
+  </html>`;
 }
 
 export function downloadStaticHtml(state: BuilderState) {

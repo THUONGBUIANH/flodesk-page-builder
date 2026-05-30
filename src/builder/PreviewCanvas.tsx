@@ -1,6 +1,6 @@
 import { Box } from "@flodesk/grain";
 import type React from "react";
-import { CARD_LAYOUT_BACKGROUND } from "../templates/rendering";
+import { CARD_LAYOUT_BACKGROUND } from "../constants";
 import type { BuilderElement, BuilderState, SelectedTarget } from "../templates/types";
 
 type PreviewCanvasProps = {

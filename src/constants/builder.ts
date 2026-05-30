@@ -1,0 +1,1 @@
+export const MAX_BUTTON_BORDER_RADIUS = 40;

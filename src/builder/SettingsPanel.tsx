@@ -1,13 +1,22 @@
-import { Slider, TextInput, Textarea, TextToggle, TextToggleGroup } from "@flodesk/grain";
+import {
+  Box,
+  FieldLabel,
+  Flex,
+  Slider,
+  Text,
+  TextInput,
+  Textarea,
+  TextToggle,
+  TextToggleGroup,
+} from "@flodesk/grain";
 import type React from "react";
-import { MAX_BUTTON_BORDER_RADIUS } from "../templates/rendering";
-import type {
-  BuilderElement,
-  BuilderState,
-  FontWeight,
-  PageSettings,
-  TextAlign,
-} from "../templates/types";
+import {
+  getSelectedElement,
+  updateElementInState,
+  updatePageSetting,
+} from "./builderState";
+import { MAX_BUTTON_BORDER_RADIUS } from "../constants";
+import type { BuilderState, FontWeight, TextAlign } from "../templates/types";
 
 type SettingsPanelProps = {
   state: BuilderState;
@@ -15,25 +24,26 @@ type SettingsPanelProps = {
 };
 
 type FieldProps = {
+  htmlFor?: string;
   label: string;
   children: React.ReactNode;
 };
 
-function Field({ label, children }: FieldProps) {
+function Field({ htmlFor, label, children }: FieldProps) {
   return (
-    <label className="settings-field">
-      <span>{label}</span>
+    <Box className="settings-field">
+      <FieldLabel htmlFor={htmlFor}>{label}</FieldLabel>
       {children}
-    </label>
+    </Box>
   );
 }
 
 function ControlField({ label, children }: FieldProps) {
   return (
-    <div className="settings-field">
-      <span>{label}</span>
+    <Box className="settings-field">
+      <FieldLabel>{label}</FieldLabel>
       {children}
-    </div>
+    </Box>
   );
 }
 
@@ -45,68 +55,46 @@ type SliderFieldProps = {
 
 function SliderField({ label, valueLabel, children }: SliderFieldProps) {
   return (
-    <div className="settings-field">
-      <div className="settings-field__label-row">
-        <span>{label}</span>
+    <Box className="settings-field">
+      <Flex className="settings-field__label-row" alignItems="center" justifyContent="space-between">
+        <FieldLabel>{label}</FieldLabel>
         <output>{valueLabel}</output>
-      </div>
+      </Flex>
       {children}
-    </div>
+    </Box>
   );
 }
 
-function updatePage(state: BuilderState, onStateChange: (state: BuilderState) => void) {
-  return <K extends keyof PageSettings>(key: K, value: PageSettings[K]) => {
-    onStateChange({
-      ...state,
-      page: {
-        ...state.page,
-        [key]: value,
-      },
-    });
-  };
-}
-
-function updateElement(
-  state: BuilderState,
-  element: BuilderElement,
-  onStateChange: (state: BuilderState) => void,
-) {
-  return (nextElement: BuilderElement) => {
-    onStateChange({
-      ...state,
-      elements: state.elements.map((item) => (item.id === element.id ? nextElement : item)),
-    });
-  };
-}
-
 export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
-  let selectedElement: BuilderElement | undefined;
-
-  if (state.selectedTarget.type === "element") {
-    const selectedElementId = state.selectedTarget.elementId;
-    selectedElement = state.elements.find((element) => element.id === selectedElementId);
-  }
+  const selectedElement = getSelectedElement(state);
 
   if (!selectedElement) {
-    const setPage = updatePage(state, onStateChange);
+    const setPage = <K extends keyof typeof state.page>(key: K, value: (typeof state.page)[K]) => {
+      onStateChange(updatePageSetting(state, key, value));
+    };
 
     return (
-      <aside className="settings-panel" aria-label="Page settings">
-        <div className="settings-panel__header">
-          <p>Page settings</p>
-          <span>Canvas</span>
-        </div>
-        <div className="settings-panel__body">
-          <Field label="Background color">
+      <Box tag="aside" className="settings-panel" aria-label="Page settings">
+        <Flex className="settings-panel__header" alignItems="center" justifyContent="space-between">
+          <Text tag="p" weight="medium">
+            Page settings
+          </Text>
+          <Text tag="span" color="content2">
+            Canvas
+          </Text>
+        </Flex>
+        <Box className="settings-panel__body">
+          <Field htmlFor="page-background-color" label="Background color">
             <input
+              id="page-background-color"
               type="color"
               value={state.page.backgroundColor}
               onChange={(event) => setPage("backgroundColor", event.target.value)}
             />
           </Field>
-          <Field label="Text color">
+          <Field htmlFor="page-text-color" label="Text color">
             <input
+              id="page-text-color"
               type="color"
               value={state.page.textColor}
               onChange={(event) => setPage("textColor", event.target.value)}
@@ -122,12 +110,14 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
               onChange={(event) => setPage("contentWidth", Number(event.target.value))}
             />
           </SliderField>
-        </div>
-      </aside>
+        </Box>
+      </Box>
     );
   }
 
-  const setElement = updateElement(state, selectedElement, onStateChange);
+  const setElement = (nextElement: typeof selectedElement) => {
+    onStateChange(updateElementInState(state, nextElement));
+  };
   const canUseButtonStyles = selectedElement.type === "button";
   const elementColor = selectedElement.style.color ?? state.page.textColor;
   const buttonBackgroundColor = selectedElement.style.backgroundColor ?? state.page.textColor;
@@ -138,13 +128,17 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
   );
 
   return (
-    <aside className="settings-panel" aria-label={`${selectedElement.label} settings`}>
-      <div className="settings-panel__header">
-        <p>{selectedElement.label} settings</p>
-        <span>{selectedElement.type}</span>
-      </div>
-      <div className="settings-panel__body">
-        <Field label="Content">
+    <Box tag="aside" className="settings-panel" aria-label={`${selectedElement.label} settings`}>
+      <Flex className="settings-panel__header" alignItems="center" justifyContent="space-between">
+        <Text tag="p" weight="medium">
+          {selectedElement.label} settings
+        </Text>
+        <Text tag="span" color="content2">
+          {selectedElement.type}
+        </Text>
+      </Flex>
+      <Box className="settings-panel__body">
+        <Field htmlFor={`${selectedElement.id}-content`} label="Content">
           {selectedElement.type === "paragraph" ? (
             <Textarea
               id={`${selectedElement.id}-content`}
@@ -172,8 +166,9 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
           )}
         </Field>
 
-        <Field label="Color">
+        <Field htmlFor={`${selectedElement.id}-color`} label="Color">
           <input
+            id={`${selectedElement.id}-color`}
             type="color"
             value={elementColor}
             onChange={(event) =>
@@ -186,8 +181,9 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
         </Field>
 
         {canUseButtonStyles ? (
-          <Field label="Background">
+          <Field htmlFor={`${selectedElement.id}-background`} label="Background">
             <input
+              id={`${selectedElement.id}-background`}
               type="color"
               value={buttonBackgroundColor}
               onChange={(event) =>
@@ -281,7 +277,7 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
             />
           </SliderField>
         ) : null}
-      </div>
-    </aside>
+      </Box>
+    </Box>
   );
 }

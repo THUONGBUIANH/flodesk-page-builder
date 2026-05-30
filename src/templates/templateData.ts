@@ -1,4 +1,4 @@
-import type { BuilderState, TemplateDefinition } from "./types";
+import type { TemplateDefinition } from "./types";
 
 export const templates: TemplateDefinition[] = [
   {
@@ -134,15 +134,3 @@ export const templates: TemplateDefinition[] = [
     ],
   },
 ];
-
-export function createStateFromTemplate(template: TemplateDefinition): BuilderState {
-  return {
-    templateId: template.id,
-    page: { ...template.page },
-    elements: template.elements.map((element) => ({
-      ...element,
-      style: { ...element.style },
-    })),
-    selectedTarget: { type: "page" },
-  };
-}

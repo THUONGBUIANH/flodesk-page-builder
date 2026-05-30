@@ -16,7 +16,8 @@ This repository contains a Flodesk frontend home assignment: a React-based stati
 ## Folder Structure
 
 - `src/app`: application shell and top-level providers.
-- `src/builder`: builder screens and editing components.
+- `src/builder`: builder screens, editing components, autosave, and builder state helpers.
+- `src/constants`: shared builder/export constants used across app, preview, and export logic.
 - `src/export`: static HTML export logic.
 - `src/templates`: template data and shared builder types.
 - `src/styles`: global styles and assignment-specific UI styling.
