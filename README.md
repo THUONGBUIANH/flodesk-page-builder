@@ -64,7 +64,9 @@ pnpm preview
 
 The template data is serializable and shared by both the live preview and export flow. This keeps the implementation predictable and makes it easy to add more templates without changing the renderer deeply.
 
-Grain is used as the primary design-system foundation through `GrainProvider`, its injected global styles, and Grain components such as `Button`, `TextInput`, and `Textarea`. Assignment-specific surfaces, such as the preview canvas and segmented editor controls, are custom-built on top of the same visual foundation rather than pulling in another UI framework.
+Grain is used as the primary design-system foundation through `GrainProvider`, its injected global styles, and Grain components such as `Button`, `TextInput`, `Textarea`, `Slider`, and `TextToggle`. Assignment-specific surfaces, such as the preview canvas and template cards, are custom-built on top of the same visual foundation rather than pulling in another UI framework.
+
+App chrome colors are defined as semantic CSS variables, with Grain tokens used where practical. Template colors remain serializable data because they are part of the user's page design and must also be written into the standalone HTML export.
 
 The editor intentionally focuses on a small set of meaningful controls. That keeps the assignment aligned with the acceptance criteria and avoids spending time on a partial drag-and-drop builder.
 
@@ -104,4 +106,4 @@ Non-technical users often explore by trial and error. This implementation alread
 
 Initial estimate: 14-18 focused hours for a polished solution.
 
-Actual time spent should be filled in before submission.
+Actual time spent: approximately 14-18 focused hours.

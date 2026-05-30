@@ -1,5 +1,6 @@
-import { TextInput, Textarea } from "@flodesk/grain";
+import { Slider, TextInput, Textarea, TextToggle, TextToggleGroup } from "@flodesk/grain";
 import type React from "react";
+import { MAX_BUTTON_BORDER_RADIUS } from "../templates/rendering";
 import type {
   BuilderElement,
   BuilderState,
@@ -24,6 +25,33 @@ function Field({ label, children }: FieldProps) {
       <span>{label}</span>
       {children}
     </label>
+  );
+}
+
+function ControlField({ label, children }: FieldProps) {
+  return (
+    <div className="settings-field">
+      <span>{label}</span>
+      {children}
+    </div>
+  );
+}
+
+type SliderFieldProps = {
+  label: string;
+  valueLabel: string;
+  children: React.ReactNode;
+};
+
+function SliderField({ label, valueLabel, children }: SliderFieldProps) {
+  return (
+    <div className="settings-field">
+      <div className="settings-field__label-row">
+        <span>{label}</span>
+        <output>{valueLabel}</output>
+      </div>
+      {children}
+    </div>
   );
 }
 
@@ -84,17 +112,16 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
               onChange={(event) => setPage("textColor", event.target.value)}
             />
           </Field>
-          <Field label="Page width">
-            <input
-              type="range"
-              min="520"
-              max="980"
-              step="20"
+          <SliderField label="Page width" valueLabel={`${state.page.contentWidth}px`}>
+            <Slider
+              aria-label="Page width"
+              min={520}
+              max={980}
+              step={20}
               value={state.page.contentWidth}
               onChange={(event) => setPage("contentWidth", Number(event.target.value))}
             />
-            <output>{state.page.contentWidth}px</output>
-          </Field>
+          </SliderField>
         </div>
       </aside>
     );
@@ -102,6 +129,13 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
 
   const setElement = updateElement(state, selectedElement, onStateChange);
   const canUseButtonStyles = selectedElement.type === "button";
+  const elementColor = selectedElement.style.color ?? state.page.textColor;
+  const buttonBackgroundColor = selectedElement.style.backgroundColor ?? state.page.textColor;
+  const elementFontSize = selectedElement.style.fontSize ?? 16;
+  const elementBorderRadius = Math.min(
+    selectedElement.style.borderRadius ?? 8,
+    MAX_BUTTON_BORDER_RADIUS,
+  );
 
   return (
     <aside className="settings-panel" aria-label={`${selectedElement.label} settings`}>
@@ -141,7 +175,7 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
         <Field label="Color">
           <input
             type="color"
-            value={selectedElement.style.color ?? "#111827"}
+            value={elementColor}
             onChange={(event) =>
               setElement({
                 ...selectedElement,
@@ -155,7 +189,7 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
           <Field label="Background">
             <input
               type="color"
-              value={selectedElement.style.backgroundColor ?? "#111827"}
+              value={buttonBackgroundColor}
               onChange={(event) =>
                 setElement({
                   ...selectedElement,
@@ -166,12 +200,12 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
           </Field>
         ) : null}
 
-        <Field label="Font size">
-          <input
-            type="range"
-            min="12"
-            max={selectedElement.type === "heading" ? "64" : "28"}
-            value={selectedElement.style.fontSize ?? 16}
+        <SliderField label="Font size" valueLabel={`${elementFontSize}px`}>
+          <Slider
+            aria-label="Font size"
+            min={12}
+            max={selectedElement.type === "heading" ? 64 : 28}
+            value={elementFontSize}
             onChange={(event) =>
               setElement({
                 ...selectedElement,
@@ -179,21 +213,20 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
               })
             }
           />
-          <output>{selectedElement.style.fontSize}px</output>
-        </Field>
+        </SliderField>
 
-        <div className="settings-field">
-          <span>Font weight</span>
-          <div className="segmented-control" role="radiogroup" aria-label="Font weight">
+        <ControlField label="Font weight">
+          <TextToggleGroup hasFullWidth role="radiogroup" aria-label="Font weight">
             {[
               ["300", "Light"],
               ["400", "Regular"],
               ["700", "Bold"],
             ].map(([value, label]) => (
-              <button
-                className={selectedElement.style.fontWeight === value ? "is-active" : ""}
+              <TextToggle
+                aria-checked={selectedElement.style.fontWeight === value}
+                isActive={selectedElement.style.fontWeight === value}
                 key={value}
-                type="button"
+                role="radio"
                 onClick={() =>
                   setElement({
                     ...selectedElement,
@@ -202,23 +235,23 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
                 }
               >
                 {label}
-              </button>
+              </TextToggle>
             ))}
-          </div>
-        </div>
+          </TextToggleGroup>
+        </ControlField>
 
-        <div className="settings-field">
-          <span>Alignment</span>
-          <div className="segmented-control" role="radiogroup" aria-label="Text alignment">
+        <ControlField label="Alignment">
+          <TextToggleGroup hasFullWidth role="radiogroup" aria-label="Text alignment">
             {[
               ["left", "Left"],
               ["center", "Center"],
               ["right", "Right"],
             ].map(([value, label]) => (
-              <button
-                className={selectedElement.style.textAlign === value ? "is-active" : ""}
+              <TextToggle
+                aria-checked={selectedElement.style.textAlign === value}
+                isActive={selectedElement.style.textAlign === value}
                 key={value}
-                type="button"
+                role="radio"
                 onClick={() =>
                   setElement({
                     ...selectedElement,
@@ -227,18 +260,18 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
                 }
               >
                 {label}
-              </button>
+              </TextToggle>
             ))}
-          </div>
-        </div>
+          </TextToggleGroup>
+        </ControlField>
 
         {canUseButtonStyles ? (
-          <Field label="Corner radius">
-            <input
-              type="range"
-              min="0"
-              max="40"
-              value={selectedElement.style.borderRadius ?? 8}
+          <SliderField label="Corner radius" valueLabel={`${elementBorderRadius}px`}>
+            <Slider
+              aria-label="Corner radius"
+              min={0}
+              max={MAX_BUTTON_BORDER_RADIUS}
+              value={elementBorderRadius}
               onChange={(event) =>
                 setElement({
                   ...selectedElement,
@@ -246,8 +279,7 @@ export function SettingsPanel({ state, onStateChange }: SettingsPanelProps) {
                 })
               }
             />
-            <output>{selectedElement.style.borderRadius}px</output>
-          </Field>
+          </SliderField>
         ) : null}
       </div>
     </aside>

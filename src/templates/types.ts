@@ -1,4 +1,4 @@
-export type ElementType = "eyebrow" | "heading" | "paragraph" | "button" | "image";
+export type ElementType = "eyebrow" | "heading" | "paragraph" | "button";
 
 export type FontWeight = "300" | "400" | "700";
 
@@ -25,7 +25,6 @@ export type BuilderElement = {
     fontWeight?: FontWeight;
     textAlign?: TextAlign;
     borderRadius?: number;
-    width?: number;
   };
 };
 

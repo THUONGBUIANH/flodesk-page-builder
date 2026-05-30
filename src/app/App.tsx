@@ -2,8 +2,34 @@ import { useEffect, useMemo, useState } from "react";
 import { clearSavedDraft, loadSavedDraft, saveDraft } from "../builder/autosave";
 import { BuilderPage } from "../builder/BuilderPage";
 import { TemplateGallery } from "../builder/TemplateGallery";
+import { MAX_BUTTON_BORDER_RADIUS } from "../templates/rendering";
 import { createStateFromTemplate, templates } from "../templates/templateData";
-import type { BuilderState } from "../templates/types";
+import type { BuilderElement, BuilderState, TemplateDefinition } from "../templates/types";
+
+function normalizeDraftElement(element: BuilderElement): BuilderElement {
+  if (element.type !== "button" || !element.style.borderRadius) {
+    return element;
+  }
+
+  return {
+    ...element,
+    style: {
+      ...element.style,
+      borderRadius: Math.min(element.style.borderRadius, MAX_BUTTON_BORDER_RADIUS),
+    },
+  };
+}
+
+function normalizeDraftWithTemplate(savedDraft: BuilderState, template: TemplateDefinition) {
+  return {
+    ...savedDraft,
+    page: {
+      ...savedDraft.page,
+      layout: template.page.layout,
+    },
+    elements: savedDraft.elements.map(normalizeDraftElement),
+  };
+}
 
 function loadDraftWithTemplateDefaults() {
   const savedDraft = loadSavedDraft();
@@ -14,17 +40,11 @@ function loadDraftWithTemplateDefaults() {
 
   const template = templates.find((item) => item.id === savedDraft.templateId);
 
-  if (!template?.page.layout || savedDraft.page.layout === template.page.layout) {
-    return savedDraft;
+  if (!template) {
+    return null;
   }
 
-  return {
-    ...savedDraft,
-    page: {
-      ...savedDraft.page,
-      layout: template.page.layout,
-    },
-  };
+  return normalizeDraftWithTemplate(savedDraft, template);
 }
 
 export function App() {

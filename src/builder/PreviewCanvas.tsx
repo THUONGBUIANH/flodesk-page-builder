@@ -1,4 +1,6 @@
+import { Box } from "@flodesk/grain";
 import type React from "react";
+import { CARD_LAYOUT_BACKGROUND } from "../templates/rendering";
 import type { BuilderElement, BuilderState, SelectedTarget } from "../templates/types";
 
 type PreviewCanvasProps = {
@@ -34,7 +36,7 @@ function buttonAlignmentStyle(element: BuilderElement): React.CSSProperties {
 
 function previewPageStyle(state: BuilderState): React.CSSProperties {
   return {
-    backgroundColor: state.page.layout === "card" ? "#f6f4ef" : state.page.backgroundColor,
+    backgroundColor: state.page.layout === "card" ? CARD_LAYOUT_BACKGROUND : state.page.backgroundColor,
     color: state.page.textColor,
     "--card-background": state.page.backgroundColor,
   } as React.CSSProperties;
@@ -50,8 +52,8 @@ export function PreviewCanvas({ state, onStateChange }: PreviewCanvasProps) {
   };
 
   return (
-    <section className="preview-region" aria-label="Page preview">
-      <div
+    <Box tag="section" className="preview-region" aria-label="Page preview">
+      <Box
         className={[
           "preview-page",
           state.page.layout === "card" ? "preview-page--card" : "",
@@ -62,7 +64,7 @@ export function PreviewCanvas({ state, onStateChange }: PreviewCanvasProps) {
         style={previewPageStyle(state)}
         onClick={selectPage}
       >
-        <div className="preview-page__content" style={{ maxWidth: state.page.contentWidth }}>
+        <Box className="preview-page__content" style={{ maxWidth: state.page.contentWidth }}>
           {state.elements.map((element) => {
             const selected = isSelected(state.selectedTarget, element.id);
             const sharedProps = {
@@ -112,8 +114,8 @@ export function PreviewCanvas({ state, onStateChange }: PreviewCanvasProps) {
               </div>
             );
           })}
-        </div>
-      </div>
-    </section>
+        </Box>
+      </Box>
+    </Box>
   );
 }

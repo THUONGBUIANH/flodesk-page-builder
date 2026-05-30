@@ -1,4 +1,4 @@
-import { Button } from "@flodesk/grain";
+import { Box, Button, Flex, IconButton, Text } from "@flodesk/grain";
 import { downloadStaticHtml } from "../export/exportHtml";
 import type { BuilderState, TemplateDefinition } from "../templates/types";
 import { PreviewCanvas } from "./PreviewCanvas";
@@ -20,24 +20,29 @@ export function BuilderPage({
   onStateChange,
 }: BuilderPageProps) {
   return (
-    <main className="builder-page grn-context">
-      <header className="app-header">
-        <div className="header-left">
-          <button
+    <Box tag="main" className="builder-page grn-context">
+      <Flex tag="header" className="app-header" alignItems="center" justifyContent="space-between">
+        <Flex className="header-left" alignItems="center">
+          <IconButton
             className="brand-mark brand-mark--button"
+            icon={<span className="brand-mark__disc" aria-hidden="true" />}
             type="button"
             aria-label="Start over"
             onClick={onStartOver}
           />
-          <div>
-            <p className="header-kicker">Editing</p>
-            <h1>{template.name}</h1>
-          </div>
-        </div>
-        <div className="header-actions">
-          <span className="autosave-status" aria-live="polite">
+          <Box>
+            <Text className="header-kicker" tag="p">
+              Editing
+            </Text>
+            <Text className="header-title" tag="h1" weight="medium">
+              {template.name}
+            </Text>
+          </Box>
+        </Flex>
+        <Flex className="header-actions" alignItems="center">
+          <Text className="autosave-status" tag="span" aria-live="polite">
             {autosaveStatus}
-          </span>
+          </Text>
           <Button className="secondary-button" type="button" variant="neutral" onClick={onStartOver}>
             Start over
           </Button>
@@ -49,13 +54,13 @@ export function BuilderPage({
           >
             Export
           </Button>
-        </div>
-      </header>
+        </Flex>
+      </Flex>
 
-      <div className="builder-workspace">
+      <Box className="builder-workspace">
         <PreviewCanvas state={state} onStateChange={onStateChange} />
         <SettingsPanel state={state} onStateChange={onStateChange} />
-      </div>
-    </main>
+      </Box>
+    </Box>
   );
 }

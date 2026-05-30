@@ -53,7 +53,11 @@ export function saveDraft(state: BuilderState) {
     savedAt: new Date().toISOString(),
   };
 
-  window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+  try {
+    window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+  } catch {
+    // Saving drafts is a convenience, so quota/privacy failures should not block editing.
+  }
 }
 
 export function clearSavedDraft() {

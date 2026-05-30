@@ -1,3 +1,4 @@
+import { CARD_LAYOUT_BACKGROUND, CARD_LAYOUT_BORDER, CARD_LAYOUT_SHADOW } from "../templates/rendering";
 import type { BuilderElement, BuilderState } from "../templates/types";
 
 function escapeHtml(value: string) {
@@ -78,7 +79,7 @@ export function buildStaticHtml(state: BuilderState) {
       body {
         margin: 0;
         min-height: 100vh;
-        background: ${isCardLayout ? "#f6f4ef" : state.page.backgroundColor};
+        background: ${isCardLayout ? CARD_LAYOUT_BACKGROUND : state.page.backgroundColor};
         color: ${state.page.textColor};
       }
 
@@ -95,10 +96,10 @@ export function buildStaticHtml(state: BuilderState) {
 
       .page-content--card {
         max-width: 560px;
-        border: 1px solid rgba(47, 36, 27, 0.18);
+        border: 1px solid ${CARD_LAYOUT_BORDER};
         border-radius: 8px;
         background: ${state.page.backgroundColor};
-        box-shadow: 0 24px 60px rgba(47, 36, 27, 0.14);
+        box-shadow: ${CARD_LAYOUT_SHADOW};
         padding: 42px;
       }
 
@@ -121,7 +122,7 @@ export function buildStaticHtml(state: BuilderState) {
 
       .page-eyebrow {
         margin-bottom: 16px;
-        letter-spacing: 0.08em;
+        letter-spacing: 0;
         text-transform: uppercase;
       }
 

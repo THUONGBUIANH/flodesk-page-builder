@@ -1,4 +1,4 @@
-import { Button } from "@flodesk/grain";
+import { Box, Button, Flex, Text } from "@flodesk/grain";
 import type { TemplateDefinition } from "../templates/types";
 
 type TemplateGalleryProps = {
@@ -8,18 +8,22 @@ type TemplateGalleryProps = {
 
 export function TemplateGallery({ templates, onSelectTemplate }: TemplateGalleryProps) {
   return (
-    <main className="template-page grn-context">
-      <header className="app-header">
-        <div className="brand-mark" aria-hidden="true" />
+    <Box tag="main" className="template-page grn-context">
+      <Flex tag="header" className="app-header" alignItems="center" justifyContent="space-between">
+        <Box className="brand-mark" aria-hidden="true" />
         <Button className="secondary-button" type="button" isDisabled>
           Export
         </Button>
-      </header>
+      </Flex>
 
-      <section className="template-picker" aria-labelledby="template-picker-title">
-        <p className="screen-kicker">Static page builder</p>
-        <h1 id="template-picker-title">Choose a template to start</h1>
-        <div className="template-grid">
+      <Box tag="section" className="template-picker" aria-labelledby="template-picker-title">
+        <Text className="screen-kicker" tag="p">
+          Static page builder
+        </Text>
+        <Text id="template-picker-title" tag="h1" weight="medium">
+          Choose a template to start
+        </Text>
+        <Box className="template-grid">
           {templates.map((template) => (
             <button
               className="template-card"
@@ -42,8 +46,8 @@ export function TemplateGallery({ templates, onSelectTemplate }: TemplateGallery
               </span>
             </button>
           ))}
-        </div>
-      </section>
-    </main>
+        </Box>
+      </Box>
+    </Box>
   );
 }

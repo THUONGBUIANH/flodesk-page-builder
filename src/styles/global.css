@@ -2,13 +2,23 @@
   color-scheme: light;
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-  background: #f6f4ef;
-  color: #171717;
-  --app-border: color-mix(in srgb, var(--grn-color-content3, #a3a3a3) 42%, transparent);
-  --app-surface: var(--grn-color-surface, #ffffff);
-  --app-content: var(--grn-color-content, #171717);
-  --app-muted: var(--grn-color-content2, #6b7280);
-  --app-accent: var(--grn-color-accent, #111111);
+  background: var(--app-background);
+  color: var(--app-content);
+  --app-background: var(--grn-color-background2);
+  --app-border: var(--grn-color-border);
+  --app-surface: var(--grn-color-background);
+  --app-surface-raised: color-mix(in srgb, var(--grn-color-background) 92%, transparent);
+  --app-surface-sticky: color-mix(in srgb, var(--grn-color-background) 88%, transparent);
+  --app-content: var(--grn-color-content);
+  --app-content-strong: var(--grn-color-content);
+  --app-content-inverse: var(--grn-color-background);
+  --app-muted: var(--grn-color-content2);
+  --app-accent: var(--grn-color-content);
+  --app-selection: var(--grn-color-selection);
+  --app-selection-page: var(--grn-color-contentSuccess);
+  --app-hover-shadow: var(--grn-shadow-m);
+  --app-card-shadow: var(--grn-shadow-l);
+  --template-card-border: var(--grn-color-border2);
 }
 
 * {
@@ -39,7 +49,7 @@ button:disabled {
 .template-page,
 .builder-page {
   min-height: 100vh;
-  background: #f6f4ef;
+  background: var(--app-background);
 }
 
 .app-header {
@@ -52,7 +62,7 @@ button:disabled {
   justify-content: space-between;
   gap: 20px;
   border-bottom: 1px solid var(--app-border);
-  background: rgba(255, 255, 255, 0.88);
+  background: var(--app-surface-sticky);
   padding: 14px 28px;
   backdrop-filter: blur(14px);
 }
@@ -64,7 +74,7 @@ button:disabled {
   gap: 14px;
 }
 
-.header-left h1 {
+.header-title {
   margin: 0;
   overflow: hidden;
   font-size: 18px;
@@ -84,12 +94,21 @@ button:disabled {
 }
 
 .brand-mark {
-  width: 36px;
-  height: 36px;
+  width: 36px !important;
+  height: 36px !important;
   flex: 0 0 auto;
-  border: 1px solid #151515;
-  border-radius: 50%;
-  background: #fff;
+  min-width: 36px !important;
+  border: 1px solid var(--app-content-strong) !important;
+  border-radius: 50% !important;
+  background: var(--app-surface) !important;
+  padding: 0 !important;
+}
+
+.brand-mark__disc {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
 }
 
 .brand-mark--button {
@@ -99,27 +118,27 @@ button:disabled {
 }
 
 .brand-mark--button:hover {
-  background: #f2eee8;
+  background: color-mix(in srgb, var(--app-background) 82%, var(--app-content-strong));
   transform: translateY(-1px);
 }
 
 .primary-button,
 .secondary-button {
   min-height: 40px;
-  border: 1px solid #111;
+  border: 1px solid var(--app-content-strong);
   border-radius: 8px;
   padding: 0 18px;
   font-weight: 700;
 }
 
 .primary-button {
-  background: #111 !important;
-  color: #fff !important;
+  background: var(--app-content-strong) !important;
+  color: var(--app-content-inverse) !important;
 }
 
 .secondary-button {
-  background: #fff !important;
-  color: #111 !important;
+  background: var(--app-surface) !important;
+  color: var(--app-content-strong) !important;
 }
 
 .header-actions {
@@ -166,7 +185,7 @@ button:disabled {
   overflow: hidden;
   border: 1px solid var(--app-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--app-surface);
   padding: 0;
   text-align: left;
   transition:
@@ -176,8 +195,8 @@ button:disabled {
 }
 
 .template-card:hover {
-  border-color: #111;
-  box-shadow: 0 16px 36px rgba(20, 20, 20, 0.12);
+  border-color: var(--app-content-strong);
+  box-shadow: var(--app-hover-shadow);
   transform: translateY(-2px);
 }
 
@@ -238,8 +257,8 @@ button:disabled {
 }
 
 .preview-page.is-selected {
-  border-color: #16875d;
-  box-shadow: inset 0 0 0 2px rgba(22, 135, 93, 0.18);
+  border-color: var(--app-selection-page);
+  box-shadow: inset 0 0 0 2px color-mix(in srgb, var(--app-selection-page) 18%, transparent);
 }
 
 .preview-page__content {
@@ -248,10 +267,10 @@ button:disabled {
 
 .preview-page--card .preview-page__content {
   max-width: min(100%, 560px);
-  border: 1px solid rgba(47, 36, 27, 0.18);
+  border: 1px solid var(--template-card-border);
   border-radius: 8px;
-  background: var(--card-background, #fffaf3);
-  box-shadow: 0 24px 60px rgba(47, 36, 27, 0.14);
+  background: var(--card-background, var(--grn-color-background));
+  box-shadow: var(--app-card-shadow);
   padding: 42px;
 }
 
@@ -285,8 +304,8 @@ button:disabled {
 
 .preview-element:hover,
 .preview-element.is-selected {
-  border-color: #00a878;
-  box-shadow: 0 0 0 3px rgba(0, 168, 120, 0.15);
+  border-color: var(--app-selection);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--app-selection) 15%, transparent);
 }
 
 .preview-element--eyebrow {
@@ -318,7 +337,7 @@ button:disabled {
 
 .settings-panel {
   border-left: 1px solid var(--app-border);
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--app-surface-raised);
 }
 
 .settings-panel__header {
@@ -353,9 +372,17 @@ button:disabled {
   gap: 8px;
 }
 
-.settings-field > span {
+.settings-field > span,
+.settings-field__label-row > span {
   font-size: 13px;
   font-weight: 700;
+}
+
+.settings-field__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
 }
 
 .settings-field input[type="text"],
@@ -363,7 +390,7 @@ button:disabled {
   width: 100%;
   border: 1px solid var(--app-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--app-surface);
   padding: 10px 12px;
   color: var(--app-content);
 }
@@ -377,50 +404,18 @@ button:disabled {
   resize: vertical;
 }
 
-.settings-field input[type="range"] {
-  width: 100%;
-  accent-color: #111;
-}
-
 .settings-field input[type="color"] {
   width: 54px;
   height: 40px;
   border: 1px solid var(--app-border);
   border-radius: 8px;
-  background: #fff;
+  background: var(--app-surface);
   padding: 4px;
 }
 
 .settings-field output {
   color: var(--app-muted);
   font-size: 12px;
-}
-
-.segmented-control {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  overflow: hidden;
-  border: 1px solid var(--app-border);
-  border-radius: 8px;
-  background: #fff;
-}
-
-.segmented-control button {
-  min-height: 36px;
-  border: 0;
-  border-right: 1px solid var(--app-border);
-  background: transparent;
-  color: #222;
-  font-size: 12px;
-}
-
-.segmented-control button:last-child {
-  border-right: 0;
-}
-
-.segmented-control button.is-active {
-  background: #111;
-  color: #fff;
 }
 
 @media (max-width: 860px) {

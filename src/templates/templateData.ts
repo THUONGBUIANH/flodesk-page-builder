@@ -115,7 +115,7 @@ export const templates: TemplateDefinition[] = [
           fontSize: 15,
           fontWeight: "700",
           textAlign: "left",
-          borderRadius: 999,
+          borderRadius: 40,
         },
       },
       {
