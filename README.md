@@ -31,6 +31,15 @@ Preview the production build:
 pnpm preview
 ```
 
+Deploy to Vercel:
+
+```bash
+pnpm dlx vercel login
+pnpm dlx vercel --prod
+```
+
+The repository includes `vercel.json` so Vercel builds with `pnpm build` and serves the generated `dist` directory.
+
 ## Core User Flow
 
 1. Choose one of the available templates.
